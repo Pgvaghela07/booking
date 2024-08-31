@@ -6,10 +6,108 @@
     <title>mail form</title>
 </head>
 <body>
-    <form action="/register" method="post">
-        <input type="text" name="name" id="Name" placeholder="Enter your Name">
-        <input type="email" name="email" id="Email" placeholder="Enter your Email">
-        <button type="submit">Submit</button>
-    </form>
+           <div class="booking-area">
+            <div class="container">
+                <div class="booking-form">
+                    <h4 class="booking-title">Book Your Ride</h4>
+                    <form id="registerForm">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Pick Up Location</label>
+                                    <input type="text" id="pickup" class="form-control" placeholder="Type Location">
+                                    <i class="far fa-location-dot"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Drop Off Location</label>
+                                    <input type="text" id="drop" class="form-control" placeholder="Type Location">
+                                    <i class="far fa-location-dot"></i>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Pick Up Date</label>
+                                    <input type="text" id="date" class="form-control date-picker" placeholder="MM/DD/YY">
+                                    <i class="far fa-calendar-days"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label>Pick Up Time</label>
+                                    <input type="text" id="time" class="form-control time-picker" placeholder="00:00 AM">
+                                    <i class="far fa-clock"></i>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="form-group">
+                                    <label>Mobile no.</label>
+                                    <input type="tel" id="number" class="form-control" placeholder="+91 123456789">
+                                    <i class="far fa-phone"></i>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-2 align-self-end mt-2">
+                                <button class="theme-btn" type="submit">Book Taxi<i
+                                        class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.getElementById('registerForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+        
+                const pickup = document.getElementById('pickup').value;
+                const drop = document.getElementById('drop').value;
+                const date = document.getElementById('date').value;
+                const time = document.getElementById('time').value;
+                const number = document.getElementById('number').value;
+        
+                const data = {
+                    pickup: pickup,
+                    drop: drop,
+                    date: date,
+                    time: time,
+                    number: number,
+                };
+        
+                fetch('https://booking-iciv.onrender.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        // Check if the response is JSON
+                        const contentType = response.headers.get("content-type");
+                        if (contentType && contentType.indexOf("application/json") !== -1) {
+                            return response.json();
+                        } else {
+                            return response.text(); // Parse it as text if not JSON
+                        }
+                    })
+                    .then(data => {
+                        // Handle the data or error
+                        if (typeof data === 'object') {
+                            console.log('Success:', data);
+                            alert('Email Sent successfully');
+                        } else {
+                            console.error('Error:', data);
+                            alert('An error occurred: ' + data);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        alert("Error", error);
+                    });
+            });
+        </script>
 </body>
 </html>
