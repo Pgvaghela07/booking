@@ -1,5 +1,4 @@
 import express from "express";
-import mongoose from "mongoose";
 import { configDotenv } from "dotenv";
 import nodemailer from "nodemailer";
 import path from "path";
@@ -8,25 +7,7 @@ import { fileURLToPath } from 'url';
 
 configDotenv()
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGO)
-let db = mongoose.connection
 
-db.once('open', () => {
-    console.log("Database connected")
-})
-
-const schema = mongoose.Schema;
-
-const UserSchema = new schema({
-    pickup: { type: String, required: true },
-    drop: { type: String, required: true },
-    date: { type: String, required: true },
-    time: { type: String, required: true },
-    number: { type: String, required: true }
-})
-
-const User = mongoose.model("User", UserSchema);
 
 // Route
 const __filename = fileURLToPath(import.meta.url);
@@ -76,7 +57,7 @@ app.post('/register', async (req, res) => {
             from: 'pgvaghela07@gmail.com',
             to: "piyushvaghela223@gmail.com",
             subject: 'Customer Booking Details',
-            text: 'Hello, Shree Balaji Tour and travels,\n\n New booking detials is here,' + '\n' + 'Pickup Location :-' + req.body.pickup + '\n' + 'Drop Location :-' + req.body.drop + '\n' + 'Booking Date :-' + req.body.date + '\n' + 'Booking Time :-' + req.body.time + '\n' + 'Booking Number :-' + req.body.number + '.'
+            text: 'Hello, Shree Balaji Tour and travels,\n New booking detials is here,' + '\n' + 'Pickup Location :-' + req.body.pickup + '\n' + 'Drop Location :-' + req.body.drop + '\n' + 'Booking Date :-' + req.body.date + '\n' + 'Booking Time :-' + req.body.time + '\n' + 'Booking Number :-' + req.body.number + '.'
         };
 
         sendermail.sendMail(mailOptions, function (error, info) {
